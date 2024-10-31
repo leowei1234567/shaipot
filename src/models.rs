@@ -1,5 +1,5 @@
-use colored::*;
 use clap::Parser;
+use colored::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Parser, Debug)]
@@ -13,7 +13,7 @@ pub struct Args {
     #[clap(short, long)]
     pub vdftime: Option<String>,
 
-    pub vdftime_parsed: Option<u64>
+    pub vdftime_parsed: Option<u64>,
 }
 
 impl Args {
@@ -41,8 +41,18 @@ impl Args {
 
     pub fn show_demo_usage() {
         println!();
-        println!("{}", "Run the miner with required arguments:".bold().bright_yellow());
-        println!("{}", "--address <shaicoin_address> --pool <POOL_URL>".bold().bright_red());
+        println!(
+            "{}",
+            "Run the miner with required arguments:"
+                .bold()
+                .bright_yellow()
+        );
+        println!(
+            "{}",
+            "--address <shaicoin_address> --pool <POOL_URL>"
+                .bold()
+                .bright_red()
+        );
         println!("{}", "OPTIONAL: --threads <AMT>".bold().bright_red());
         println!("{}", "OPTIONAL: --vdftime <SECONDS>".bold().bright_red());
         println!();

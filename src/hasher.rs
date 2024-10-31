@@ -1,7 +1,7 @@
+use super::vdf_solution::{HCGraphUtil, GRAPH_SIZE};
 use hex;
 use primitive_types::U256;
 use sha2::{Digest, Sha256};
-use super::vdf_solution::{HCGraphUtil, GRAPH_SIZE};
 
 pub fn compute_hash_no_vdf(data: &str, hc_util: &mut HCGraphUtil) -> Option<(String, String)> {
     // Create the vdfSolution array with all values set to 0xFFFF (uint16_t max value)
@@ -23,7 +23,7 @@ pub fn compute_hash_no_vdf(data: &str, hc_util: &mut HCGraphUtil) -> Option<(Str
     let mut hasher = Sha256::new();
     hasher.update(&data_bytes);
     let hash1 = hasher.finalize();
-    
+
     let hash1_reversed = hex::encode(hash1.iter().rev().cloned().collect::<Vec<u8>>());
     let graph_hash_u256 = U256::from_str_radix(&hash1_reversed, 16).unwrap();
     let mut path = hc_util.find_hamiltonian_cycle_vp(graph_hash_u256);
@@ -44,7 +44,7 @@ pub fn compute_hash_no_vdf(data: &str, hc_util: &mut HCGraphUtil) -> Option<(Str
             format!("{:02x}{:02x}", little_endian_val[0], little_endian_val[1])
         })
         .collect();
-    
+
     let data_with_vdf_solved = format!("{}{}", data, vdf_solution_hex_solved);
 
     let data_bytes_solved = hex::decode(data_with_vdf_solved).expect("Invalid hex input");
@@ -59,8 +59,10 @@ pub fn compute_hash_no_vdf(data: &str, hc_util: &mut HCGraphUtil) -> Option<(Str
     Some((final_hash_reversed, vdf_solution_hex_solved))
 }
 
-
-pub fn compute_hash_no_vdf_verify(data: &str, hc_util: &mut HCGraphUtil) -> Option<(String, String)> {
+pub fn compute_hash_no_vdf_verify(
+    data: &str,
+    hc_util: &mut HCGraphUtil,
+) -> Option<(String, String)> {
     // Create the vdfSolution array with all values set to 0xFFFF (uint16_t max value)
     let vdf_solution: Vec<u16> = vec![0xFFFF; GRAPH_SIZE.into()];
 
@@ -80,7 +82,7 @@ pub fn compute_hash_no_vdf_verify(data: &str, hc_util: &mut HCGraphUtil) -> Opti
     let mut hasher = Sha256::new();
     hasher.update(&data_bytes);
     let hash1 = hasher.finalize();
-    
+
     let hash1_reversed = hex::encode(hash1.iter().rev().cloned().collect::<Vec<u8>>());
     let graph_hash_u256 = U256::from_str_radix(&hash1_reversed, 16).unwrap();
     let mut path = hc_util.find_hamiltonian_cycle_v2(graph_hash_u256);
@@ -101,7 +103,7 @@ pub fn compute_hash_no_vdf_verify(data: &str, hc_util: &mut HCGraphUtil) -> Opti
             format!("{:02x}{:02x}", little_endian_val[0], little_endian_val[1])
         })
         .collect();
-    
+
     let data_with_vdf_solved = format!("{}{}", data, vdf_solution_hex_solved);
 
     let data_bytes_solved = hex::decode(data_with_vdf_solved).expect("Invalid hex input");

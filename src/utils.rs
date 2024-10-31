@@ -1,8 +1,8 @@
-use rand::Rng;
-use tokio::signal;
-use std::process::exit;
-use primitive_types::U256;
 use super::ascii_art::print_exit_art;
+use primitive_types::U256;
+use rand::Rng;
+use std::process::exit;
+use tokio::signal;
 
 #[cfg(unix)]
 use tokio::signal::unix::{signal, SignalKind};
@@ -10,7 +10,8 @@ use tokio::signal::unix::{signal, SignalKind};
 pub async fn handle_exit_signals() {
     #[cfg(unix)]
     {
-        let mut sigterm = signal(SignalKind::terminate()).expect("Failed to create SIGTERM handler");
+        let mut sigterm =
+            signal(SignalKind::terminate()).expect("Failed to create SIGTERM handler");
         tokio::select! {
             _ = sigterm.recv() => {}
             _ = signal::ctrl_c() => {}
